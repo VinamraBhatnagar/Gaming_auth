@@ -221,13 +221,16 @@
             position: relative;
         }
 
-        .input-wrapper i {
+        .input-wrapper i.fa-lock,
+        .input-wrapper i.fa-envelope,
+        .input-wrapper i.fa-user {
             position: absolute;
             left: 15px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-secondary);
             transition: color 0.3s ease;
+            pointer-events: none;
         }
 
         .input-wrapper input {
@@ -257,17 +260,23 @@
             box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
         }
 
-        .input-wrapper input:focus + i {
+        .input-wrapper input:focus ~ i.fa-lock,
+        .input-wrapper input:focus ~ i.fa-envelope,
+        .input-wrapper input:focus ~ i.fa-user {
             color: var(--accent-blue);
         }
 
         .input-wrapper .toggle-password {
             position: absolute;
             right: 15px;
+            left: auto;
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
             color: var(--text-secondary);
+            z-index: 10;
+            padding: 5px;
+            font-size: 1rem;
         }
 
         .input-wrapper .toggle-password:hover {
@@ -531,7 +540,9 @@
                 padding-right: 45px;
             }
             
-            .input-wrapper i {
+            .input-wrapper i.fa-lock,
+            .input-wrapper i.fa-envelope,
+            .input-wrapper i.fa-user {
                 left: 12px;
             }
             
