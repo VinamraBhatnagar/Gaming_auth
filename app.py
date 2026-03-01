@@ -20,22 +20,22 @@ WEATHER_API_KEY = os.environ.get('OPENWEATHER_API_KEY', '')
 @app.route('/')
 def landing():
     """Serve the landing page."""
-    return send_from_directory(BASE_DIR, 'landing.html')
+    return send_from_directory(BASE_DIR, 'index.html')
 
 @app.route('/landing.html')
 def landing_page():
-    """Serve the landing page."""
-    return send_from_directory(BASE_DIR, 'landing.html')
+    """Redirect old landing.html to index.html"""
+    return send_from_directory(BASE_DIR, 'index.html')
 
 @app.route('/login.html')
 def login_page():
     """Serve the login page."""
     return send_from_directory(BASE_DIR, 'login.html')
 
-@app.route('/index.html')
+@app.route('/home.html')
 def home_page():
     """Serve the main home page."""
-    return send_from_directory(BASE_DIR, 'index.html')
+    return send_from_directory(BASE_DIR, 'home.html')
 
 @app.route('/clothing.html')
 def clothing_page():

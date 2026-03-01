@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameStyle Hub - Gaming IDs & Fashion</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        (function() {
+            const user = JSON.parse(localStorage.getItem('gamestylehub-user'));
+            if (!user || (!user.isLoggedIn && !user.isGuest)) {
+                window.location.href = 'login.html';
+            }
+        })();
+    </script>
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+        }
+        .gradient-orb:nth-child(1) {
+            width: 600px;
+            height: 600px;
+            background: var(--accent);
+            top: -200px;
+            right: -200px;
+        }
+        .gradient-orb:nth-child(2) {
+            width: 500px;
+            height: 500px;
+            background: var(--secondary);
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -5s;
+        }
+        .gradient-orb:nth-child(3) {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: 50%;
+            left: 50%;
+            animation-delay: -10s;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -50px) scale(1.1); }
+            50% { transform: translate(-30px, 30px) scale(0.9); }
+            75% { transform: translate(-50px, -30px) scale(1.05); }
+        }
+        
+        /* Grid Pattern */
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(48, 54, 61, 0.2) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(48, 54, 61, 0.2) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* Scroll Animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Fade In Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in-up { animation: fadeInUp 0.8s ease forwards; }
+        .fade-in-left { animation: fadeInLeft 0.8s ease forwards; }
+        .fade-in-right { animation: fadeInRight 0.8s ease forwards; }
+        .scale-in { animation: scaleIn 0.6s ease forwards; }
+        
+        /* Stagger delays */
+        .delay-1 { animation-delay: 0.1s; opacity: 0; }
+        .delay-2 { animation-delay: 0.2s; opacity: 0; }
+        .delay-3 { animation-delay: 0.3s; opacity: 0; }
+        .delay-4 { animation-delay: 0.4s; opacity: 0; }
+        .delay-5 { animation-delay: 0.5s; opacity: 0; }
+        
+        /* Hover Effects */
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px var(--shadow-color);
+        }
+        
+        /* Pulse Animation */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .pulse-hover:hover {
+            animation: pulse 0.6s ease;
+        }
+        
+        /* Glow Effect */
+        .glow-effect {
+            position: relative;
+        }
+        .glow-effect::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0;
+            filter: blur(15px);
+            transition: opacity 0.3s ease;
+        }
+        .glow-effect:hover::after {
+            opacity: 0.6;
+        }
+        
+        /* Typing Effect */
+        .typing-text {
+            overflow: hidden;
+            border-right: 3px solid var(--primary);
+            white-space: nowrap;
+            animation: typing 3s steps(30) 1s forwards, blink 0.75s step-end infinite;
+        }
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+        
+        /* Particle Effect */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--secondary);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: rise 15s infinite;
+        }
+        @keyframes rise {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="gradient-orb"></div>
+        <div class="gradient-orb"></div>
+        <div class="gradient-orb"></div>
+    </div>
+    <div class="grid-pattern"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Weather Indicator -->
+    <div class="weather-indicator" id="weatherIndicator">
+        <i class="fas fa-sun" id="weatherIcon"></i>
+        <span id="weatherText">Loading weather...</span>
+        <span id="temperature"></span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-gamepad"></i>
+                GameStyle<span>Hub</span>
+            </a>
+            <div class="nav-links">
+                <a href="home.html" class="active">Home</a>
+                <a href="gaming.html">Gaming IDs</a>
+                <a href="clothing.html">Clothes</a>
+                <a href="scrims.html">BGMI Scrims</a>
+            </div>
+            <div class="nav-actions">
+                <div class="search-box">
+                    <input type="text" placeholder="Search products...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <a href="#cart" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+                <button class="theme-toggle" id="themeToggle" title="Toggle manual theme">
+                    <i class="fas fa-palette"></i>
+                </button>
+                <!-- User Menu -->
+                <div class="user-menu" id="userMenu">
+                    <button class="user-btn" id="userBtn">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="userName">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="user-info">
+                            <i class="fas fa-user-circle"></i>
+                            <div>
+                                <strong id="dropdownUserName">User</strong>
+                                <span id="dropdownUserEmail">user@email.com</span>
+                            </div>
+                        </div>
+                        <hr>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-shopping-bag"></i> My Orders
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-heart"></i> Wishlist
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                        <hr>
+                        <a href="#" class="dropdown-item logout" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Level Up Your <span class="highlight">Game</span> & <span class="highlight">Style</span></h1>
+            <p>Premium gaming accounts and exclusive streetwear – all in one place. Your one-stop shop for digital gaming assets and trendy fashion.</p>
+            <div class="hero-buttons">
+                <a href="gaming.html" class="btn btn-primary">
+                    <i class="fas fa-gamepad"></i> Shop Gaming IDs
+                </a>
+                <a href="clothing.html" class="btn btn-secondary">
+                    <i class="fas fa-tshirt"></i> Shop Clothes
+                </a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="floating-card card-1">
+                <i class="fas fa-trophy"></i>
+                <span>Pro Accounts</span>
+            </div>
+            <div class="floating-card card-2">
+                <i class="fas fa-fire"></i>
+                <span>Hot Deals</span>
+            </div>
+            <div class="floating-card card-3">
+                <i class="fas fa-star"></i>
+                <span>Premium</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="feature-card">
+            <i class="fas fa-shield-alt"></i>
+            <h3>Secure Transactions</h3>
+            <p>100% safe and encrypted payments</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-bolt"></i>
+            <h3>Instant Delivery</h3>
+            <p>Get your gaming IDs within minutes</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-headset"></i>
+            <h3>24/7 Support</h3>
+            <p>We're here to help anytime</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-undo"></i>
+            <h3>Easy Returns</h3>
+            <p>30-day return policy on clothes</p>
+        </div>
+    </section>
+
+    <!-- Shop Categories Section -->
+    <section class="categories-section" id="shop">
+        <div class="section-header">
+            <h2><i class="fas fa-store"></i> Explore Our Shop</h2>
+            <p>Choose a category to start shopping</p>
+        </div>
+        <div class="categories-grid">
+            <a href="gaming.html" class="category-card gaming-card">
+                <div class="category-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <h3>Gaming IDs</h3>
+                <p>Premium accounts for BGMI, Free Fire, Genshin Impact, and COD with rare items and high ranks.</p>
+                <div class="category-features">
+                    <span><i class="fas fa-check"></i> Instant Delivery</span>
+                    <span><i class="fas fa-check"></i> Verified Accounts</span>
+                </div>
+                <span class="shop-btn">Shop Now <i class="fas fa-arrow-right"></i></span>
+            </a>
+            <a href="clothing.html" class="category-card clothing-card">
+                <div class="category-icon">
+                    <i class="fas fa-tshirt"></i>
+                </div>
+                <h3>Gaming Streetwear</h3>
+                <p>T-shirts, hoodies, caps, and accessories with gaming-inspired designs for the modern gamer.</p>
+                <div class="category-features">
+                    <span><i class="fas fa-check"></i> Premium Quality</span>
+                    <span><i class="fas fa-check"></i> Free Shipping</span>
+                </div>
+                <span class="shop-btn">Shop Now <i class="fas fa-arrow-right"></i></span>
+            </a>
+            <a href="scrims.html" class="category-card scrims-card">
+                <div class="category-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h3>BGMI Scrims</h3>
+                <p>Register your team for weekly tournaments. Compete with the best and win cash prizes!</p>
+                <div class="category-features">
+                    <span><i class="fas fa-check"></i> ₹50K Prize Pool</span>
+                    <span><i class="fas fa-check"></i> Weekly Events</span>
+                </div>
+                <span class="shop-btn">Register Now <i class="fas fa-arrow-right"></i></span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <h2>What Our Customers Say</h2>
+        <div class="testimonial-slider">
+            <div class="testimonial-card">
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p>"Got my Valorant account instantly! Amazing service and great prices. The rank was exactly as described."</p>
+                <div class="customer">
+                    <div class="customer-avatar">JD</div>
+                    <div class="customer-info">
+                        <h4>Jake D.</h4>
+                        <span>Verified Buyer</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p>"The hoodie quality is insane! Super comfortable and the gaming design gets compliments everywhere."</p>
+                <div class="customer">
+                    <div class="customer-avatar">SM</div>
+                    <div class="customer-info">
+                        <h4>Sarah M.</h4>
+                        <span>Verified Buyer</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <p>"Best place to get rare gaming accounts. Customer support helped me through the entire process!"</p>
+                <div class="customer">
+                    <div class="customer-avatar">AK</div>
+                    <div class="customer-info">
+                        <h4>Alex K.</h4>
+                        <span>Verified Buyer</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <div class="newsletter-content">
+            <h2>Stay in the Loop</h2>
+            <p>Subscribe for exclusive deals, new drops, and gaming news</p>
+            <form class="newsletter-form" id="newsletterForm">
+                <input type="email" placeholder="Enter your email" required>
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="about-content">
+            <h2>About GameStyle Hub</h2>
+            <p>We're passionate gamers and fashion enthusiasts who created the ultimate destination for gaming accounts and gaming-inspired streetwear. Our mission is to help you level up both your gaming experience and your style.</p>
+            <div class="about-stats">
+                <div class="stat">
+                    <h3>10K+</h3>
+                    <span>Happy Customers</span>
+                </div>
+                <div class="stat">
+                    <h3>5K+</h3>
+                    <span>Accounts Sold</span>
+                </div>
+                <div class="stat">
+                    <h3>2K+</h3>
+                    <span>Clothes Delivered</span>
+                </div>
+                <div class="stat">
+                    <h3>4.9</h3>
+                    <span>Average Rating</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="contact-container">
+            <div class="contact-info">
+                <h2>Get in Touch</h2>
+                <p>Have questions? We'd love to hear from you!</p>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>support@gamestylehub.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+1 (555) 123-4567</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <span>24/7 Support Available</span>
+                    </div>
+                </div>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitch"></i></a>
+                </div>
+            </div>
+            <form class="contact-form" id="contactForm">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <select>
+                    <option value="">Select Topic</option>
+                    <option value="gaming">Gaming IDs</option>
+                    <option value="clothes">Clothes</option>
+                    <option value="support">Support</option>
+                    <option value="other">Other</option>
+                </select>
+                <textarea placeholder="Your Message" rows="5" required></textarea>
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3><i class="fas fa-gamepad"></i> GameStyle Hub</h3>
+                <p>Your ultimate destination for gaming accounts and gaming-inspired fashion.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="home.html">Home</a>
+                <a href="gaming.html">Gaming IDs</a>
+                <a href="clothing.html">Clothes</a>
+                <a href="scrims.html">BGMI Scrims</a>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="#">FAQ</a>
+                <a href="#">Shipping Info</a>
+                <a href="#">Returns</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Refund Policy</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 GameStyle Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Your Cart</h3>
+            <button class="close-cart" id="closeCart">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be inserted by JavaScript -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="btn btn-primary checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+    <div class="cart-overlay" id="cartOverlay"></div>
+
+    <!-- Product Modal -->
+    <div class="product-modal" id="productModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModal">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body" id="modalBody">
+                <!-- Product details will be inserted by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    
+    <script src="script.js"></script>
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            if (!container) return;
+            const colors = ['#238636', '#58a6ff', '#a371f7', '#db61a2'];
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.width = (2 + Math.random() * 4) + 'px';
+                particle.style.height = particle.style.width;
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Scroll animations
+        function handleScrollAnimations() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+            elements.forEach(el => observer.observe(el));
+        }
+
+        // Add animate-on-scroll class to sections
+        document.querySelectorAll('.features, .categories-section, .newsletter, .about, .contact, .feature-card, .category-card, .stat').forEach(el => {
+            el.classList.add('animate-on-scroll');
+        });
+        handleScrollAnimations();
+    </script>
+</body>
+</html>
