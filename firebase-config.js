@@ -160,7 +160,7 @@ async function signOutUser() {
     try {
         await auth.signOut();
         localStorage.removeItem('gamestylehub-user');
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
         return { success: true };
     } catch (error) {
         console.error('Sign out error:', error);
@@ -177,6 +177,23 @@ async function signInAsGuest() {
     } catch (error) {
         console.error('Guest sign in error:', error);
         return { success: false, error: error.message };
+    }
+}
+
+// Password reset
+async function sendPasswordResetEmail(email) {
+    try {
+        await auth.sendPasswordResetEmail(email);
+        return { success: true, message: 'Password reset email sent! Check your inbox.' };
+    } catch (error) {
+        console.error('Password reset error:', error);
+        let errorMessage = 'Failed to send reset email.';
+        if (error.code === 'auth/user-not-found') {
+            errorMessage = 'No account found with this email address.';
+        } else if (error.code === 'auth/invalid-email') {
+            errorMessage = 'Please enter a valid email address.';
+        }
+        return { success: false, error: errorMessage };
     }
 }
 
@@ -562,7 +579,8 @@ window.firebaseAuth = {
     signInWithGoogle,
     signInWithGitHub,
     signOut: signOutUser,
-    guestLogin: signInAsGuest
+    guestLogin: signInAsGuest,
+    resetPassword: sendPasswordResetEmail
 };
 
 window.firebaseCart = {

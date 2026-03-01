@@ -321,7 +321,7 @@ async function logout() {
     } else {
         localStorage.removeItem('gamestylehub-user');
         localStorage.removeItem('gamestylehub-cart');
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     }
 }
 
