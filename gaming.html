@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaming IDs - GameStyle Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        (function() {
+            const user = JSON.parse(localStorage.getItem('gamestylehub-user'));
+            if (!user || (!user.isLoggedIn && !user.isGuest)) {
+                window.location.href = 'login.html';
+            }
+        })();
+    </script>
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+        }
+        .gradient-orb:nth-child(1) {
+            width: 600px;
+            height: 600px;
+            background: #238636;
+            top: -200px;
+            right: -200px;
+        }
+        .gradient-orb:nth-child(2) {
+            width: 500px;
+            height: 500px;
+            background: #58a6ff;
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -5s;
+        }
+        .gradient-orb:nth-child(3) {
+            width: 400px;
+            height: 400px;
+            background: #a371f7;
+            top: 50%;
+            left: 50%;
+            animation-delay: -10s;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -50px) scale(1.1); }
+            50% { transform: translate(-30px, 30px) scale(0.9); }
+            75% { transform: translate(-50px, -30px) scale(1.05); }
+        }
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(48, 54, 61, 0.2) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(48, 54, 61, 0.2) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #58a6ff;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: rise 15s infinite;
+        }
+        @keyframes rise {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+        
+        /* Scroll Animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in-up { animation: fadeInUp 0.8s ease forwards; }
+        
+        .game-hero {
+            padding: 120px 50px 60px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+        }
+        .game-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        .game-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .game-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 30px 50px;
+            background: var(--background-secondary);
+            flex-wrap: wrap;
+            position: sticky;
+            top: 70px;
+            z-index: 100;
+        }
+        .game-tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 20px 30px;
+            background: var(--surface);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 140px;
+        }
+        .game-tab:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--shadow-color);
+        }
+        .game-tab.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+        .game-tab i {
+            font-size: 2rem;
+        }
+        .game-tab span {
+            font-weight: 600;
+        }
+        .game-section {
+            display: none;
+            padding: 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .game-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .game-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .game-section-header h2 {
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .game-section-header h2 img {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+        }
+        .sort-filter {
+            display: flex;
+            gap: 15px;
+        }
+        .sort-filter select {
+            padding: 10px 20px;
+            border: 2px solid var(--background-secondary);
+            border-radius: 10px;
+            background: var(--surface);
+            color: var(--text-primary);
+            font-family: inherit;
+            cursor: pointer;
+        }
+        .account-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+        .account-card {
+            background: var(--surface);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 30px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+        .account-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px var(--shadow-color);
+        }
+        .account-header {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            padding: 25px;
+            color: white;
+            position: relative;
+        }
+        .account-level {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        .account-header h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        .account-stats {
+            display: flex;
+            gap: 20px;
+        }
+        .account-stats span {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .account-body {
+            padding: 25px;
+        }
+        .account-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .account-features span {
+            background: var(--background-secondary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        .account-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .account-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .account-price .original {
+            font-size: 1rem;
+            color: var(--text-light);
+            text-decoration: line-through;
+            margin-left: 10px;
+        }
+        .buy-btn {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .buy-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px var(--shadow-color);
+        }
+        .scrims-banner {
+            background: linear-gradient(135deg, #ff6b35, #ff9500);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .scrims-banner-content h3 {
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        .scrims-banner-content p {
+            color: rgba(255,255,255,0.9);
+        }
+        .scrims-banner .btn {
+            background: white;
+            color: #ff6b35;
+        }
+        @media (max-width: 768px) {
+            .game-hero { padding: 100px 20px 40px; }
+            .game-hero h1 { font-size: 2rem; }
+            .game-tabs { padding: 20px; gap: 10px; }
+            .game-tab { padding: 15px 20px; min-width: 100px; }
+            .game-tab i { font-size: 1.5rem; }
+            .game-section { padding: 30px 20px; }
+            .scrims-banner { margin: 20px; padding: 25px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="gradient-orb"></div>
+        <div class="gradient-orb"></div>
+        <div class="gradient-orb"></div>
+    </div>
+    <div class="grid-pattern"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Weather Indicator -->
+    <div class="weather-indicator" id="weatherIndicator">
+        <i class="fas fa-sun" id="weatherIcon"></i>
+        <span id="weatherText">Loading...</span>
+        <span id="temperature"></span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="landing.html" class="logo">
+                <i class="fas fa-gamepad"></i>
+                GameStyle<span>Hub</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="gaming.html" class="active">Gaming IDs</a>
+                <a href="clothing.html">Clothes</a>
+                <a href="scrims.html">BGMI Scrims</a>
+            </div>
+            <div class="nav-actions">
+                <a href="#" class="cart-icon" onclick="openCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+                    <i class="fas fa-palette"></i>
+                </button>
+                <div class="user-menu" id="userMenu">
+                    <button class="user-btn" id="userBtn">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="userName">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="user-info">
+                            <i class="fas fa-user-circle"></i>
+                            <div>
+                                <strong id="dropdownUserName">User</strong>
+                                <span id="dropdownUserEmail">user@email.com</span>
+                            </div>
+                        </div>
+                        <hr>
+                        <a href="#" class="dropdown-item"><i class="fas fa-shopping-bag"></i> My Orders</a>
+                        <a href="#" class="dropdown-item"><i class="fas fa-heart"></i> Wishlist</a>
+                        <a href="#" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a>
+                        <hr>
+                        <a href="#" class="dropdown-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="game-hero">
+        <h1><i class="fas fa-gamepad"></i> Gaming IDs Store</h1>
+        <p>Premium gaming accounts with rare items, high ranks, and exclusive skins. Instant delivery guaranteed!</p>
+    </section>
+
+    <!-- BGMI Scrims Banner -->
+    <div class="scrims-banner">
+        <div class="scrims-banner-content">
+            <h3><i class="fas fa-trophy"></i> BGMI Scrims Tournament</h3>
+            <p>Register your squad for daily scrims with cash prizes!</p>
+        </div>
+        <a href="scrims.html" class="btn">Register Now <i class="fas fa-arrow-right"></i></a>
+    </div>
+
+    <!-- Game Tabs -->
+    <div class="game-tabs">
+        <div class="game-tab active" data-game="bgmi">
+            <i class="fas fa-bullseye"></i>
+            <span>BGMI</span>
+        </div>
+        <div class="game-tab" data-game="freefire">
+            <i class="fas fa-fire"></i>
+            <span>Free Fire</span>
+        </div>
+        <div class="game-tab" data-game="genshin">
+            <i class="fas fa-wind"></i>
+            <span>Genshin Impact</span>
+        </div>
+        <div class="game-tab" data-game="cod">
+            <i class="fas fa-crosshairs"></i>
+            <span>COD Mobile</span>
+        </div>
+    </div>
+
+    <!-- BGMI Section -->
+    <section class="game-section active" id="bgmi">
+        <div class="game-section-header">
+            <h2><i class="fas fa-bullseye" style="color: var(--primary);"></i> BGMI Accounts</h2>
+            <div class="sort-filter">
+                <select id="bgmiSort">
+                    <option value="featured">Featured</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="level">Level</option>
+                </select>
+            </div>
+        </div>
+        <div class="account-grid" id="bgmiGrid">
+            <!-- Cards will be inserted by JS -->
+        </div>
+    </section>
+
+    <!-- Free Fire Section -->
+    <section class="game-section" id="freefire">
+        <div class="game-section-header">
+            <h2><i class="fas fa-fire" style="color: #ff5722;"></i> Free Fire Accounts</h2>
+            <div class="sort-filter">
+                <select id="freefireSort">
+                    <option value="featured">Featured</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                </select>
+            </div>
+        </div>
+        <div class="account-grid" id="freefireGrid">
+            <!-- Cards will be inserted by JS -->
+        </div>
+    </section>
+
+    <!-- Genshin Impact Section -->
+    <section class="game-section" id="genshin">
+        <div class="game-section-header">
+            <h2><i class="fas fa-wind" style="color: #00bcd4;"></i> Genshin Impact Accounts</h2>
+            <div class="sort-filter">
+                <select id="genshinSort">
+                    <option value="featured">Featured</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                </select>
+            </div>
+        </div>
+        <div class="account-grid" id="genshinGrid">
+            <!-- Cards will be inserted by JS -->
+        </div>
+    </section>
+
+    <!-- COD Mobile Section -->
+    <section class="game-section" id="cod">
+        <div class="game-section-header">
+            <h2><i class="fas fa-crosshairs" style="color: #4caf50;"></i> COD Mobile Accounts</h2>
+            <div class="sort-filter">
+                <select id="codSort">
+                    <option value="featured">Featured</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                </select>
+            </div>
+        </div>
+        <div class="account-grid" id="codGrid">
+            <!-- Cards will be inserted by JS -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3><i class="fas fa-gamepad"></i> GameStyle Hub</h3>
+                <p>Your ultimate destination for gaming accounts and gaming-inspired fashion.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="index.html">Home</a>
+                <a href="gaming.html">Gaming IDs</a>
+                <a href="clothing.html">Clothes</a>
+                <a href="scrims.html">BGMI Scrims</a>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="#">FAQ</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Discord</a>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Refund Policy</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 GameStyle Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Your Cart</h3>
+            <button class="close-cart" id="closeCart" onclick="closeCart()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <p>Your cart is empty</p>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="btn btn-primary checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+    <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <script>
+        // ===== Gaming Accounts Data =====
+        const gamingAccounts = {
+            bgmi: [
+                {
+                    id: 'bgmi1',
+                    name: 'Conqueror Account Season 25',
+                    level: 75,
+                    rank: 'Conqueror',
+                    price: 149.99,
+                    originalPrice: 199.99,
+                    features: ['Conqueror Frame', 'M416 Glacier', '100+ Outfits', 'All RP Rewards'],
+                    stats: { kd: '6.5', matches: '2500+', wins: '800+' }
+                },
+                {
+                    id: 'bgmi2',
+                    name: 'Ace Master Account',
+                    level: 68,
+                    rank: 'Ace Master',
+                    price: 89.99,
+                    originalPrice: 129.99,
+                    features: ['Ace Frame', 'AWM Dragon', '50+ Outfits', 'Fool Set'],
+                    stats: { kd: '4.2', matches: '1500+', wins: '400+' }
+                },
+                {
+                    id: 'bgmi3',
+                    name: 'Maxed Out Account',
+                    level: 80,
+                    rank: 'Crown',
+                    price: 199.99,
+                    originalPrice: 299.99,
+                    features: ['3x Mythic Outfits', 'All Gun Skins', 'Pharaoh Set', 'Lab Upgrades Max'],
+                    stats: { kd: '3.5', matches: '5000+', wins: '1200+' }
+                },
+                {
+                    id: 'bgmi4',
+                    name: 'Starter Premium Account',
+                    level: 45,
+                    rank: 'Diamond',
+                    price: 39.99,
+                    originalPrice: null,
+                    features: ['Premium Crate Skins', '20+ Outfits', 'UC: 1000', 'RP Active'],
+                    stats: { kd: '2.8', matches: '500+', wins: '100+' }
+                }
+            ],
+            freefire: [
+                {
+                    id: 'ff1',
+                    name: 'Heroic Grandmaster Account',
+                    level: 70,
+                    rank: 'Grandmaster',
+                    price: 129.99,
+                    originalPrice: 179.99,
+                    features: ['Criminal Bundle', 'All Elite Pass', 'Rare Emotes', 'Diamonds: 5000'],
+                    stats: { kd: '5.0', matches: '3000+', wins: '1000+' }
+                },
+                {
+                    id: 'ff2',
+                    name: 'Legendary Bundle Collection',
+                    level: 65,
+                    rank: 'Heroic',
+                    price: 199.99,
+                    originalPrice: 249.99,
+                    features: ['Hip Hop Bundle', 'Sakura Bundle', 'All Characters', 'Max Skills'],
+                    stats: { kd: '4.5', matches: '2000+', wins: '700+' }
+                },
+                {
+                    id: 'ff3',
+                    name: 'OG Account 2019',
+                    level: 75,
+                    rank: 'Grandmaster',
+                    price: 299.99,
+                    originalPrice: 399.99,
+                    features: ['Old Elite Passes', 'Rare Bundles', 'Event Items', 'Guild Leader'],
+                    stats: { kd: '6.0', matches: '10000+', wins: '3000+' }
+                },
+                {
+                    id: 'ff4',
+                    name: 'Budget Pro Account',
+                    level: 55,
+                    rank: 'Diamond',
+                    price: 49.99,
+                    originalPrice: null,
+                    features: ['10+ Bundles', 'Good Gun Skins', 'Active Guild', 'Diamonds: 500'],
+                    stats: { kd: '3.0', matches: '800+', wins: '200+' }
+                }
+            ],
+            genshin: [
+                {
+                    id: 'gi1',
+                    name: 'AR 60 Whale Account',
+                    level: 60,
+                    rank: 'AR 60',
+                    price: 499.99,
+                    originalPrice: 699.99,
+                    features: ['C6 Raiden', 'C6 Hu Tao', 'All 5-Stars', 'R5 Weapons'],
+                    stats: { fiveStars: '40+', primogems: '50000+', spiral: '36★' }
+                },
+                {
+                    id: 'gi2',
+                    name: 'Mid-Game Account',
+                    level: 55,
+                    rank: 'AR 55',
+                    price: 149.99,
+                    originalPrice: 199.99,
+                    features: ['C0 Raiden', 'C1 Zhongli', '15+ 5-Stars', 'Good Artifacts'],
+                    stats: { fiveStars: '15', primogems: '10000', spiral: '33★' }
+                },
+                {
+                    id: 'gi3',
+                    name: 'Starter 5-Star Account',
+                    level: 35,
+                    rank: 'AR 35',
+                    price: 29.99,
+                    originalPrice: null,
+                    features: ['1x Limited 5-Star', 'Story Ready', 'Fresh Account', 'Primogems: 5000'],
+                    stats: { fiveStars: '2', primogems: '5000', spiral: 'Floor 6' }
+                },
+                {
+                    id: 'gi4',
+                    name: 'Ayaka + Kazuha Account',
+                    level: 50,
+                    rank: 'AR 50',
+                    price: 89.99,
+                    originalPrice: 119.99,
+                    features: ['C0 Ayaka', 'C0 Kazuha', 'C0 Mona', 'Good Team Builds'],
+                    stats: { fiveStars: '8', primogems: '8000', spiral: '30★' }
+                }
+            ],
+            cod: [
+                {
+                    id: 'cod1',
+                    name: 'Legendary Ranked Account',
+                    level: 150,
+                    rank: 'Legendary',
+                    price: 119.99,
+                    originalPrice: 159.99,
+                    features: ['Legendary Frame', 'All Operators', 'Diamond Camo', 'Damascus'],
+                    stats: { kd: '3.5', matches: '5000+', wins: '2500+' }
+                },
+                {
+                    id: 'cod2',
+                    name: 'Completionist Account',
+                    level: 150,
+                    rank: 'Grand Master',
+                    price: 199.99,
+                    originalPrice: 279.99,
+                    features: ['All Legendaries', 'All BP Items', 'All Camos', 'Max Battle Pass'],
+                    stats: { kd: '4.0', matches: '8000+', wins: '4000+' }
+                },
+                {
+                    id: 'cod3',
+                    name: 'Mythic Weapon Account',
+                    level: 100,
+                    rank: 'Grand Master',
+                    price: 159.99,
+                    originalPrice: null,
+                    features: ['2x Mythic Guns', 'Legendary Operators', '50+ Blueprints', 'CP: 2000'],
+                    stats: { kd: '2.8', matches: '3000+', wins: '1200+' }
+                },
+                {
+                    id: 'cod4',
+                    name: 'Fresh Master Account',
+                    level: 80,
+                    rank: 'Master',
+                    price: 59.99,
+                    originalPrice: null,
+                    features: ['Good Operators', '20+ Blueprints', 'Gold Camo', 'Active Season'],
+                    stats: { kd: '2.5', matches: '1000+', wins: '400+' }
+                }
+            ]
+        };
+
+        let cart = JSON.parse(localStorage.getItem('gamestylehub-cart')) || [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initUser();
+            initWeather();
+            renderAllGames();
+            initTabs();
+            updateCartUI();
+        });
+
+        // User Management
+        function initUser() {
+            const user = JSON.parse(localStorage.getItem('gamestylehub-user'));
+            if (!user) return;
+            
+            document.getElementById('userName').textContent = user.name || 'Guest';
+            document.getElementById('dropdownUserName').textContent = user.name || 'Guest';
+            document.getElementById('dropdownUserEmail').textContent = user.email || 'Not logged in';
+            
+            document.getElementById('userBtn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.getElementById('userMenu').classList.toggle('open');
+            });
+            
+            document.addEventListener('click', () => {
+                document.getElementById('userMenu').classList.remove('open');
+            });
+        }
+
+        async function logout() {
+            if (window.firebaseAuth) {
+                await firebaseAuth.signOut();
+            } else {
+                localStorage.removeItem('gamestylehub-user');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Weather
+        function initWeather() {
+            const hour = new Date().getHours();
+            let theme, icon, text;
+            
+            if (hour >= 6 && hour < 12) {
+                theme = 'sunny'; icon = 'fa-sun'; text = 'Sunny';
+            } else if (hour >= 12 && hour < 17) {
+                theme = 'cloudy'; icon = 'fa-cloud-sun'; text = 'Cloudy';
+            } else if (hour >= 17 && hour < 20) {
+                theme = 'hot'; icon = 'fa-temperature-high'; text = 'Warm';
+            } else {
+                theme = 'night'; icon = 'fa-moon'; text = 'Night';
+            }
+            
+            document.body.setAttribute('data-weather', theme);
+            document.getElementById('weatherIcon').className = `fas ${icon}`;
+            document.getElementById('weatherText').textContent = text;
+        }
+
+        // Theme Toggle
+        const themes = ['sunny', 'cloudy', 'rainy', 'snowy', 'thunderstorm', 'night', 'hot'];
+        let themeIndex = 0;
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            themeIndex = (themeIndex + 1) % themes.length;
+            document.body.setAttribute('data-weather', themes[themeIndex]);
+        });
+
+        // Tabs
+        function initTabs() {
+            document.querySelectorAll('.game-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.game-section').forEach(s => s.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(tab.dataset.game).classList.add('active');
+                });
+            });
+        }
+
+        // Render Games
+        function renderAllGames() {
+            Object.keys(gamingAccounts).forEach(game => {
+                renderGameGrid(game, gamingAccounts[game]);
+            });
+        }
+
+        function renderGameGrid(game, accounts) {
+            const grid = document.getElementById(`${game}Grid`);
+            grid.innerHTML = accounts.map(acc => createAccountCard(acc, game)).join('');
+        }
+
+        function createAccountCard(account, game) {
+            const originalPrice = account.originalPrice 
+                ? `<span class="original">$${account.originalPrice.toFixed(2)}</span>` 
+                : '';
+            
+            const statsHtml = Object.entries(account.stats).map(([key, val]) => 
+                `<span><strong>${key.toUpperCase()}:</strong> ${val}</span>`
+            ).join('');
+            
+            return `
+                <div class="account-card">
+                    <div class="account-header">
+                        <span class="account-level">Level ${account.level}</span>
+                        <h3>${account.name}</h3>
+                        <div class="account-stats">${statsHtml}</div>
+                    </div>
+                    <div class="account-body">
+                        <div class="account-features">
+                            ${account.features.map(f => `<span>${f}</span>`).join('')}
+                        </div>
+                        <div class="account-price-row">
+                            <div class="account-price">
+                                $${account.price.toFixed(2)}${originalPrice}
+                            </div>
+                            <button class="buy-btn" onclick="addToCart('${account.id}', '${game}')">
+                                <i class="fas fa-cart-plus"></i> Buy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Cart Functions
+        async function addToCart(id, game) {
+            const account = gamingAccounts[game].find(a => a.id === id);
+            if (!account) return;
+            
+            // Use Firebase cart if available
+            if (window.firebaseCart) {
+                await firebaseCart.add({
+                    id: account.id,
+                    name: account.name,
+                    price: account.price,
+                    game: game,
+                    type: 'gaming'
+                });
+            } else {
+                // Fallback to localStorage
+                const existing = cart.find(item => item.id === id);
+                if (existing) {
+                    existing.quantity += 1;
+                } else {
+                    cart.push({
+                        id: account.id,
+                        name: account.name,
+                        price: account.price,
+                        game: game,
+                        quantity: 1
+                    });
+                }
+                saveCart();
+                updateCartUI();
+                showNotification(`${account.name} added to cart!`);
+            }
+        }
+
+        function removeFromCart(id) {
+            if (window.firebaseCart) {
+                firebaseCart.remove(id);
+            } else {
+                cart = cart.filter(item => item.id !== id);
+                saveCart();
+                updateCartUI();
+            }
+        }
+
+        function saveCart() {
+            localStorage.setItem('gamestylehub-cart', JSON.stringify(cart));
+        }
+
+        function updateCartUI() {
+            const cartData = window.cart || cart;
+            const count = cartData.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            document.getElementById('cartCount').textContent = count;
+            
+            const cartItems = document.getElementById('cartItems');
+            if (cartData.length === 0) {
+                cartItems.innerHTML = '<div class="empty-cart"><i class="fas fa-shopping-cart"></i><p>Your cart is empty</p></div>';
+            } else {
+                cartItems.innerHTML = cartData.map(item => `
+                    <div class="cart-item">
+                        <div class="cart-item-image"><i class="fas fa-gamepad"></i></div>
+                        <div class="cart-item-details">
+                            <h4>${item.name}</h4>
+                            <span>Qty: ${item.quantity || 1}</span>
+                            <span class="price">$${(item.price * (item.quantity || 1)).toFixed(2)}</span>
+                        </div>
+                        <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('cartTotal').textContent = `$${total.toFixed(2)}`;
+        }
+
+        function openCart() {
+            document.getElementById('cartSidebar').classList.add('open');
+            document.getElementById('cartOverlay').classList.add('open');
+        }
+
+        function closeCart() {
+            document.getElementById('cartSidebar').classList.remove('open');
+            document.getElementById('cartOverlay').classList.remove('open');
+        }
+
+        function showNotification(message) {
+            const notif = document.createElement('div');
+            notif.style.cssText = `
+                position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+                background: var(--primary); color: white; padding: 15px 30px;
+                border-radius: 50px; font-weight: 500; z-index: 10000;
+                box-shadow: 0 5px 30px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;
+            `;
+            notif.textContent = message;
+            document.body.appendChild(notif);
+            setTimeout(() => {
+                notif.style.animation = 'slideDown 0.3s ease forwards';
+                setTimeout(() => notif.remove(), 300);
+            }, 2000);
+        }
+    </script>
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            if (!container) return;
+            const colors = ['#238636', '#58a6ff', '#a371f7', '#db61a2'];
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.width = (2 + Math.random() * 4) + 'px';
+                particle.style.height = particle.style.width;
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Scroll animations
+        function handleScrollAnimations() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+            elements.forEach(el => observer.observe(el));
+        }
+        document.querySelectorAll('.game-section, .card, .game-tab').forEach(el => {
+            el.classList.add('animate-on-scroll');
+        });
+        handleScrollAnimations();
+    </script>
+</body>
+</html>
