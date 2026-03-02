@@ -177,18 +177,45 @@
             font-weight: 600;
             cursor: pointer;
             border-radius: 8px;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+
+        .tab-btn:active::before {
+            width: 200px;
+            height: 200px;
         }
 
         .tab-btn:hover {
             color: var(--text-primary);
+            transform: scale(1.02);
         }
 
         .tab-btn.active {
             background: var(--accent-green);
             color: white;
             box-shadow: 0 4px 15px rgba(35, 134, 54, 0.4);
+            animation: tabPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes tabPulse {
+            0%, 100% { box-shadow: 0 4px 15px rgba(35, 134, 54, 0.4); }
+            50% { box-shadow: 0 4px 25px rgba(35, 134, 54, 0.6); }
         }
 
         .auth-form {
@@ -324,18 +351,46 @@
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-family: inherit;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            position: relative;
+            overflow: hidden;
+            animation: submitGlow 2s ease-in-out infinite;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
         }
 
         .submit-btn:hover {
             background: var(--accent-green-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(35, 134, 54, 0.4);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(35, 134, 54, 0.5), 0 0 40px rgba(35, 134, 54, 0.2);
+            animation: none;
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        @keyframes submitGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(35, 134, 54, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(35, 134, 54, 0); }
         }
 
         .submit-btn.loading {
@@ -399,17 +454,50 @@
             color: var(--text-primary);
             font-size: 1.2rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+
+        .social-btn:active::before {
+            width: 150px;
+            height: 150px;
+        }
+
+        .social-btn i {
+            transition: transform 0.3s ease;
         }
 
         .social-btn:hover {
             background: var(--bg-primary);
-            transform: translateY(-2px);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .social-btn.google:hover { border-color: #ea4335; color: #ea4335; }
-        .social-btn.discord:hover { border-color: #5865f2; color: #5865f2; }
-        .social-btn.github:hover { border-color: var(--text-primary); }
+        .social-btn:hover i {
+            transform: scale(1.2) rotate(-5deg);
+        }
+
+        .social-btn:active {
+            transform: translateY(-1px) scale(1);
+        }
+
+        .social-btn.google:hover { border-color: #ea4335; color: #ea4335; box-shadow: 0 8px 20px rgba(234, 67, 53, 0.3); }
+        .social-btn.discord:hover { border-color: #5865f2; color: #5865f2; box-shadow: 0 8px 20px rgba(88, 101, 242, 0.3); }
+        .social-btn.github:hover { border-color: var(--text-primary); box-shadow: 0 8px 20px rgba(240, 246, 252, 0.2); }
 
         .guest-login {
             margin-top: 25px;
@@ -428,12 +516,44 @@
             font-size: 0.95rem;
             cursor: pointer;
             font-family: inherit;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .guest-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(163, 113, 247, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .guest-btn:hover::before {
+            left: 100%;
+        }
+
+        .guest-btn i {
+            transition: transform 0.3s ease;
         }
 
         .guest-btn:hover {
             border-color: var(--accent-purple);
             color: var(--accent-purple);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(163, 113, 247, 0.2);
+            background: rgba(163, 113, 247, 0.05);
+        }
+
+        .guest-btn:hover i {
+            transform: scale(1.1);
+        }
+
+        .guest-btn:active {
+            transform: translateY(0);
         }
 
         .back-link {
@@ -448,11 +568,23 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            transition: color 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        .back-link a i {
+            transition: transform 0.3s ease;
         }
 
         .back-link a:hover {
             color: var(--accent-blue);
+            background: rgba(88, 166, 255, 0.1);
+            transform: translateX(-5px);
+        }
+
+        .back-link a:hover i {
+            transform: translateX(-3px);
         }
 
         .error-message, .success-message {

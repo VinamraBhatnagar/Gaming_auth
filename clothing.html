@@ -155,21 +155,48 @@
             border: 2px solid transparent;
             border-radius: 30px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-weight: 500;
             color: var(--text-primary);
+            position: relative;
+            overflow: hidden;
+        }
+        .category-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+        .category-btn:active::before {
+            width: 200px;
+            height: 200px;
         }
         .category-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px var(--shadow-color);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 35px var(--shadow-color);
         }
         .category-btn.active {
             border-color: var(--primary);
             background: var(--primary);
             color: white;
+            animation: categoryPulse 2s ease-in-out infinite;
+        }
+        @keyframes categoryPulse {
+            0%, 100% { box-shadow: 0 5px 20px var(--shadow-color); }
+            50% { box-shadow: 0 8px 30px var(--glow-color); }
         }
         .category-btn i {
             font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        .category-btn:hover i {
+            transform: scale(1.2) rotate(-5deg);
         }
         .clothing-section {
             padding: 50px;
@@ -201,11 +228,20 @@
             border-radius: 10px;
             cursor: pointer;
             color: var(--text-secondary);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .view-btn.active, .view-btn:hover {
+        .view-btn:hover {
             border-color: var(--primary);
             color: var(--primary);
+            transform: scale(1.05);
+        }
+        .view-btn.active {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(var(--primary-rgb), 0.1);
+        }
+        .view-btn:active {
+            transform: scale(0.98);
         }
         .products-grid {
             display: grid;
@@ -309,12 +345,38 @@
             cursor: pointer;
             font-weight: 500;
             color: var(--text-secondary);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .size-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease;
+            z-index: 0;
+        }
+        .size-btn:hover::before, .size-btn.active::before {
+            width: 60px;
+            height: 60px;
+        }
+        .size-btn span {
+            position: relative;
+            z-index: 1;
         }
         .size-btn:hover, .size-btn.active {
             border-color: var(--primary);
-            background: var(--primary);
             color: white;
+            transform: scale(1.1);
+        }
+        .size-btn:active {
+            transform: scale(1.05);
         }
         .color-options {
             display: flex;
@@ -327,11 +389,29 @@
             border-radius: 50%;
             cursor: pointer;
             border: 3px solid transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        .color-btn::after {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            right: -6px;
+            bottom: -6px;
+            border-radius: 50%;
+            border: 2px solid transparent;
             transition: all 0.3s ease;
         }
-        .color-btn:hover, .color-btn.active {
+        .color-btn:hover::after, .color-btn.active::after {
             border-color: var(--text-primary);
-            transform: scale(1.1);
+        }
+        .color-btn:hover, .color-btn.active {
+            transform: scale(1.15);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .color-btn:active {
+            transform: scale(1.05);
         }
         .product-footer {
             display: flex;
@@ -352,20 +432,57 @@
         }
         .add-btn {
             background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            background-size: 200% 200%;
             color: white;
             border: none;
             padding: 12px 25px;
             border-radius: 25px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             gap: 8px;
+            position: relative;
+            overflow: hidden;
+            animation: addBtnGlow 2s ease-in-out infinite;
+        }
+        .add-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        .add-btn:hover::before {
+            left: 100%;
+        }
+        .add-btn i {
+            transition: transform 0.3s ease;
         }
         .add-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px var(--shadow-color);
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 10px 30px var(--shadow-color), 0 0 40px var(--glow-color);
+            animation: none;
+        }
+        .add-btn:hover i {
+            transform: scale(1.2) rotate(-10deg);
+            animation: cartShake 0.5s ease;
+        }
+        .add-btn:active {
+            transform: scale(1.02) translateY(0);
+        }
+        @keyframes addBtnGlow {
+            0%, 100% { box-shadow: 0 3px 15px var(--shadow-color); }
+            50% { box-shadow: 0 5px 25px var(--glow-color); }
+        }
+        @keyframes cartShake {
+            0%, 100% { transform: scale(1.2) rotate(-10deg); }
+            25% { transform: scale(1.3) rotate(-15deg); }
+            75% { transform: scale(1.3) rotate(-5deg); }
         }
         .rating {
             display: flex;
@@ -396,6 +513,28 @@
         .promo-banner .btn {
             background: white;
             color: #6c63ff;
+            position: relative;
+            overflow: hidden;
+        }
+        .promo-banner .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(108, 99, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s ease, height 0.5s ease;
+        }
+        .promo-banner .btn:active::after {
+            width: 300px;
+            height: 300px;
+        }
+        .promo-banner .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
         @media (max-width: 992px) {
             .products-grid.list-view .product-card {
