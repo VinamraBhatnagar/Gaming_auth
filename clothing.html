@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clothing Store - GameStyle Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        (function() {
+            const user = JSON.parse(localStorage.getItem('gamestylehub-user'));
+            if (!user || (!user.isLoggedIn && !user.isGuest)) {
+                window.location.href = 'login.html';
+            }
+        })();
+    </script>
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+        }
+        .gradient-orb:nth-child(1) {
+            width: 600px;
+            height: 600px;
+            background: #db61a2;
+            top: -200px;
+            right: -200px;
+        }
+        .gradient-orb:nth-child(2) {
+            width: 500px;
+            height: 500px;
+            background: #a371f7;
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -5s;
+        }
+        .gradient-orb:nth-child(3) {
+            width: 400px;
+            height: 400px;
+            background: #58a6ff;
+            top: 50%;
+            left: 50%;
+            animation-delay: -10s;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -50px) scale(1.1); }
+            50% { transform: translate(-30px, 30px) scale(0.9); }
+            75% { transform: translate(-50px, -30px) scale(1.05); }
+        }
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(48, 54, 61, 0.2) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(48, 54, 61, 0.2) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #db61a2;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: rise 15s infinite;
+        }
+        @keyframes rise {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+        
+        /* Scroll Animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in-up { animation: fadeInUp 0.8s ease forwards; }
+        
+        .clothing-hero {
+            padding: 120px 50px 60px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+        }
+        .clothing-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        .clothing-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .category-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 30px 50px;
+            background: var(--background-secondary);
+            flex-wrap: wrap;
+            position: sticky;
+            top: 70px;
+            z-index: 100;
+        }
+        .category-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            background: var(--surface);
+            border: 2px solid transparent;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+            color: var(--text-primary);
+            position: relative;
+            overflow: hidden;
+        }
+        .category-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+        .category-btn:active::before {
+            width: 200px;
+            height: 200px;
+        }
+        .category-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 35px var(--shadow-color);
+        }
+        .category-btn.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+            animation: categoryPulse 2s ease-in-out infinite;
+        }
+        @keyframes categoryPulse {
+            0%, 100% { box-shadow: 0 5px 20px var(--shadow-color); }
+            50% { box-shadow: 0 8px 30px var(--glow-color); }
+        }
+        .category-btn i {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        .category-btn:hover i {
+            transform: scale(1.2) rotate(-5deg);
+        }
+        .clothing-section {
+            padding: 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .section-title span {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .view-toggle {
+            display: flex;
+            gap: 10px;
+        }
+        .view-btn {
+            padding: 10px 15px;
+            background: var(--surface);
+            border: 2px solid var(--background-secondary);
+            border-radius: 10px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .view-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: scale(1.05);
+        }
+        .view-btn.active {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(var(--primary-rgb), 0.1);
+        }
+        .view-btn:active {
+            transform: scale(0.98);
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .products-grid.list-view {
+            grid-template-columns: 1fr;
+        }
+        .product-card {
+            background: var(--surface);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 30px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px var(--shadow-color);
+        }
+        .products-grid.list-view .product-card {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+        }
+        .product-image {
+            height: 280px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .products-grid.list-view .product-image {
+            height: 200px;
+        }
+        .product-image i {
+            font-size: 5rem;
+            color: white;
+            opacity: 0.9;
+        }
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #ff4444;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .product-badge.new {
+            background: #00c851;
+        }
+        .product-wishlist {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--surface);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+        .product-wishlist:hover, .product-wishlist.active {
+            background: #ff4444;
+            color: white;
+        }
+        .product-info {
+            padding: 25px;
+        }
+        .product-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+        .product-info .description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .size-options {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .size-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--background-secondary);
+            background: transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .size-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease;
+            z-index: 0;
+        }
+        .size-btn:hover::before, .size-btn.active::before {
+            width: 60px;
+            height: 60px;
+        }
+        .size-btn span {
+            position: relative;
+            z-index: 1;
+        }
+        .size-btn:hover, .size-btn.active {
+            border-color: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+        .size-btn:active {
+            transform: scale(1.05);
+        }
+        .color-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .color-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        .color-btn::after {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            right: -6px;
+            bottom: -6px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .color-btn:hover::after, .color-btn.active::after {
+            border-color: var(--text-primary);
+        }
+        .color-btn:hover, .color-btn.active {
+            transform: scale(1.15);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .color-btn:active {
+            transform: scale(1.05);
+        }
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .product-price .original {
+            font-size: 1rem;
+            color: var(--text-light);
+            text-decoration: line-through;
+            margin-left: 10px;
+        }
+        .add-btn {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            background-size: 200% 200%;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+            animation: addBtnGlow 2s ease-in-out infinite;
+        }
+        .add-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        .add-btn:hover::before {
+            left: 100%;
+        }
+        .add-btn i {
+            transition: transform 0.3s ease;
+        }
+        .add-btn:hover {
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 10px 30px var(--shadow-color), 0 0 40px var(--glow-color);
+            animation: none;
+        }
+        .add-btn:hover i {
+            transform: scale(1.2) rotate(-10deg);
+            animation: cartShake 0.5s ease;
+        }
+        .add-btn:active {
+            transform: scale(1.02) translateY(0);
+        }
+        @keyframes addBtnGlow {
+            0%, 100% { box-shadow: 0 3px 15px var(--shadow-color); }
+            50% { box-shadow: 0 5px 25px var(--glow-color); }
+        }
+        @keyframes cartShake {
+            0%, 100% { transform: scale(1.2) rotate(-10deg); }
+            25% { transform: scale(1.3) rotate(-15deg); }
+            75% { transform: scale(1.3) rotate(-5deg); }
+        }
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        .rating span {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        .promo-banner {
+            background: linear-gradient(135deg, #6c63ff, #a29bfe);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 0 50px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            color: white;
+        }
+        .promo-banner h3 {
+            font-size: 1.8rem;
+        }
+        .promo-banner .btn {
+            background: white;
+            color: #6c63ff;
+            position: relative;
+            overflow: hidden;
+        }
+        .promo-banner .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(108, 99, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s ease, height 0.5s ease;
+        }
+        .promo-banner .btn:active::after {
+            width: 300px;
+            height: 300px;
+        }
+        .promo-banner .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        @media (max-width: 992px) {
+            .products-grid.list-view .product-card {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .clothing-hero { padding: 100px 20px 40px; }
+            .clothing-hero h1 { font-size: 2rem; }
+            .category-nav { padding: 20px; gap: 10px; }
+            .category-btn { padding: 12px 20px; font-size: 0.9rem; }
+            .clothing-section { padding: 30px 20px; }
+            .promo-banner { margin: 0 20px 20px; padding: 25px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="gradient-orb"></div>
+        <div class="gradient-orb"></div>
+        <div class="gradient-orb"></div>
+    </div>
+    <div class="grid-pattern"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Weather Indicator -->
+    <div class="weather-indicator" id="weatherIndicator">
+        <i class="fas fa-sun" id="weatherIcon"></i>
+        <span id="weatherText">Loading...</span>
+        <span id="temperature"></span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-gamepad"></i>
+                GameStyle<span>Hub</span>
+            </a>
+            <div class="nav-links">
+                <a href="home.html">Home</a>
+                <a href="gaming.html">Gaming IDs</a>
+                <a href="clothing.html" class="active">Clothes</a>
+                <a href="scrims.html">BGMI Scrims</a>
+            </div>
+            <div class="nav-actions">
+                <a href="#" class="cart-icon" onclick="openCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+                    <i class="fas fa-palette"></i>
+                </button>
+                <div class="user-menu" id="userMenu">
+                    <button class="user-btn" id="userBtn">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="userName">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="user-info">
+                            <i class="fas fa-user-circle"></i>
+                            <div>
+                                <strong id="dropdownUserName">User</strong>
+                                <span id="dropdownUserEmail">user@email.com</span>
+                            </div>
+                        </div>
+                        <hr>
+                        <a href="#" class="dropdown-item"><i class="fas fa-shopping-bag"></i> My Orders</a>
+                        <a href="#" class="dropdown-item"><i class="fas fa-heart"></i> Wishlist</a>
+                        <a href="#" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a>
+                        <hr>
+                        <a href="#" class="dropdown-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="clothing-hero">
+        <h1><i class="fas fa-tshirt"></i> Gaming Streetwear</h1>
+        <p>Premium gaming-inspired fashion for the modern gamer. Level up your style!</p>
+    </section>
+
+    <!-- Promo Banner -->
+    <div class="promo-banner">
+        <div>
+            <h3><i class="fas fa-tags"></i> Summer Sale - Up to 40% OFF!</h3>
+            <p>Use code GAMER40 at checkout</p>
+        </div>
+        <a href="#" class="btn">Shop Sale <i class="fas fa-arrow-right"></i></a>
+    </div>
+
+    <!-- Category Navigation -->
+    <div class="category-nav">
+        <button class="category-btn active" data-category="all">
+            <i class="fas fa-th"></i> All Items
+        </button>
+        <button class="category-btn" data-category="tshirts">
+            <i class="fas fa-tshirt"></i> T-Shirts
+        </button>
+        <button class="category-btn" data-category="hoodies">
+            <i class="fas fa-mitten"></i> Hoodies
+        </button>
+        <button class="category-btn" data-category="caps">
+            <i class="fas fa-hat-cowboy"></i> Caps
+        </button>
+        <button class="category-btn" data-category="accessories">
+            <i class="fas fa-glasses"></i> Accessories
+        </button>
+    </div>
+
+    <!-- Products Section -->
+    <section class="clothing-section">
+        <div class="section-title">
+            <span><i class="fas fa-fire" style="color: var(--primary);"></i> <span id="categoryTitle">All Items</span></span>
+            <div class="view-toggle">
+                <button class="view-btn active" onclick="setView('grid')"><i class="fas fa-th"></i></button>
+                <button class="view-btn" onclick="setView('list')"><i class="fas fa-list"></i></button>
+            </div>
+        </div>
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be inserted by JS -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3><i class="fas fa-gamepad"></i> GameStyle Hub</h3>
+                <p>Your ultimate destination for gaming accounts and gaming-inspired fashion.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="home.html">Home</a>
+                <a href="gaming.html">Gaming IDs</a>
+                <a href="clothing.html">Clothes</a>
+                <a href="scrims.html">BGMI Scrims</a>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="#">FAQ</a>
+                <a href="#">Shipping Info</a>
+                <a href="#">Returns</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Refund Policy</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 GameStyle Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Your Cart</h3>
+            <button class="close-cart" onclick="closeCart()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <p>Your cart is empty</p>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="btn btn-primary checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+    <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <script>
+        // ===== Clothing Products Data =====
+        const clothingProducts = [
+            {
+                id: 'cl1',
+                name: 'Neon Gamer Hoodie',
+                category: 'hoodies',
+                price: 69.99,
+                originalPrice: 89.99,
+                badge: 'sale',
+                icon: 'fa-shirt',
+                rating: 4.9,
+                reviews: 342,
+                description: 'Premium quality hoodie with neon gaming graphics. Glow-in-the-dark print.',
+                sizes: ['S', 'M', 'L', 'XL', '2XL'],
+                colors: ['#1a1a2e', '#ff6b35', '#6c63ff']
+            },
+            {
+                id: 'cl2',
+                name: 'Pixel Art Gaming Tee',
+                category: 'tshirts',
+                price: 34.99,
+                originalPrice: null,
+                badge: 'new',
+                icon: 'fa-tshirt',
+                rating: 4.8,
+                reviews: 521,
+                description: 'Retro-style pixel art t-shirt with iconic gaming references.',
+                sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
+                colors: ['#000000', '#ffffff', '#2d3436']
+            },
+            {
+                id: 'cl3',
+                name: 'BGMI Champion Hoodie',
+                category: 'hoodies',
+                price: 79.99,
+                originalPrice: 99.99,
+                badge: 'sale',
+                icon: 'fa-shirt',
+                rating: 4.9,
+                reviews: 189,
+                description: 'Official BGMI esports style hoodie with champion embroidery.',
+                sizes: ['M', 'L', 'XL', '2XL'],
+                colors: ['#1a1a2e', '#ff9500', '#00bcd4']
+            },
+            {
+                id: 'cl4',
+                name: 'Gaming Legends Cap',
+                category: 'caps',
+                price: 29.99,
+                originalPrice: 39.99,
+                badge: null,
+                icon: 'fa-hat-cowboy',
+                rating: 4.7,
+                reviews: 198,
+                description: 'Snapback cap with embroidered gaming controller design.',
+                sizes: ['One Size'],
+                colors: ['#000000', '#1a1a2e', '#ff6b35']
+            },
+            {
+                id: 'cl5',
+                name: 'Controller Print Tee',
+                category: 'tshirts',
+                price: 29.99,
+                originalPrice: null,
+                badge: null,
+                icon: 'fa-gamepad',
+                rating: 4.6,
+                reviews: 412,
+                description: 'Stylish t-shirt with minimalist controller graphic.',
+                sizes: ['S', 'M', 'L', 'XL', '2XL'],
+                colors: ['#000000', '#ffffff', '#6c63ff']
+            },
+            {
+                id: 'cl6',
+                name: 'RGB Keyboard Mousepad XXL',
+                category: 'accessories',
+                price: 49.99,
+                originalPrice: 69.99,
+                badge: 'sale',
+                icon: 'fa-keyboard',
+                rating: 4.9,
+                reviews: 876,
+                description: 'Extra large gaming mousepad with RGB edge lighting.',
+                sizes: ['XXL'],
+                colors: ['#1a1a2e']
+            },
+            {
+                id: 'cl7',
+                name: 'Free Fire Elite Tee',
+                category: 'tshirts',
+                price: 32.99,
+                originalPrice: null,
+                badge: 'new',
+                icon: 'fa-fire',
+                rating: 4.7,
+                reviews: 234,
+                description: 'Free Fire inspired gaming t-shirt with fire graphics.',
+                sizes: ['S', 'M', 'L', 'XL'],
+                colors: ['#ff5722', '#000000', '#ffffff']
+            },
+            {
+                id: 'cl8',
+                name: 'Esports Team Jacket',
+                category: 'hoodies',
+                price: 129.99,
+                originalPrice: 169.99,
+                badge: 'sale',
+                icon: 'fa-vest',
+                rating: 4.8,
+                reviews: 156,
+                description: 'Premium esports team style jacket with neon accents.',
+                sizes: ['M', 'L', 'XL', '2XL'],
+                colors: ['#1a1a2e', '#6c63ff', '#00bcd4']
+            },
+            {
+                id: 'cl9',
+                name: 'Gaming Wristband Set',
+                category: 'accessories',
+                price: 14.99,
+                originalPrice: 19.99,
+                badge: null,
+                icon: 'fa-hand',
+                rating: 4.5,
+                reviews: 234,
+                description: 'Set of 3 gaming wristbands with moisture-wicking fabric.',
+                sizes: ['One Size'],
+                colors: ['#ff6b35', '#6c63ff', '#00c851']
+            },
+            {
+                id: 'cl10',
+                name: 'Streamer Dad Hat',
+                category: 'caps',
+                price: 24.99,
+                originalPrice: null,
+                badge: null,
+                icon: 'fa-tv',
+                rating: 4.7,
+                reviews: 167,
+                description: 'Laid-back dad hat with subtle "Live" streaming text.',
+                sizes: ['One Size'],
+                colors: ['#000000', '#1a1a2e', '#6c63ff']
+            },
+            {
+                id: 'cl11',
+                name: 'Genshin Impact Windbreaker',
+                category: 'hoodies',
+                price: 89.99,
+                originalPrice: null,
+                badge: 'new',
+                icon: 'fa-wind',
+                rating: 4.9,
+                reviews: 98,
+                description: 'Lightweight windbreaker with Genshin Impact element symbols.',
+                sizes: ['S', 'M', 'L', 'XL'],
+                colors: ['#00bcd4', '#ff9500', '#6c63ff']
+            },
+            {
+                id: 'cl12',
+                name: 'COD Warzone Tee',
+                category: 'tshirts',
+                price: 34.99,
+                originalPrice: null,
+                badge: null,
+                icon: 'fa-crosshairs',
+                rating: 4.6,
+                reviews: 289,
+                description: 'Call of Duty Warzone themed tactical t-shirt.',
+                sizes: ['S', 'M', 'L', 'XL', '2XL'],
+                colors: ['#4caf50', '#000000', '#2d3436']
+            }
+        ];
+
+        let cart = JSON.parse(localStorage.getItem('gamestylehub-cart')) || [];
+        let currentCategory = 'all';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initUser();
+            initWeather();
+            renderProducts(clothingProducts);
+            initCategoryFilters();
+            updateCartUI();
+        });
+
+        // User Management
+        function initUser() {
+            const user = JSON.parse(localStorage.getItem('gamestylehub-user'));
+            if (!user) return;
+            
+            document.getElementById('userName').textContent = user.name || 'Guest';
+            document.getElementById('dropdownUserName').textContent = user.name || 'Guest';
+            document.getElementById('dropdownUserEmail').textContent = user.email || 'Not logged in';
+            
+            document.getElementById('userBtn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.getElementById('userMenu').classList.toggle('open');
+            });
+            
+            document.addEventListener('click', () => {
+                document.getElementById('userMenu').classList.remove('open');
+            });
+        }
+
+        async function logout() {
+            if (window.firebaseAuth) {
+                await firebaseAuth.signOut();
+            } else {
+                localStorage.removeItem('gamestylehub-user');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Weather
+        function initWeather() {
+            const hour = new Date().getHours();
+            let theme, icon, text;
+            
+            if (hour >= 6 && hour < 12) {
+                theme = 'sunny'; icon = 'fa-sun'; text = 'Sunny';
+            } else if (hour >= 12 && hour < 17) {
+                theme = 'cloudy'; icon = 'fa-cloud-sun'; text = 'Cloudy';
+            } else if (hour >= 17 && hour < 20) {
+                theme = 'hot'; icon = 'fa-temperature-high'; text = 'Warm';
+            } else {
+                theme = 'night'; icon = 'fa-moon'; text = 'Night';
+            }
+            
+            document.body.setAttribute('data-weather', theme);
+            document.getElementById('weatherIcon').className = `fas ${icon}`;
+            document.getElementById('weatherText').textContent = text;
+        }
+
+        // Theme Toggle
+        const themes = ['sunny', 'cloudy', 'rainy', 'snowy', 'thunderstorm', 'night', 'hot'];
+        let themeIndex = 0;
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            themeIndex = (themeIndex + 1) % themes.length;
+            document.body.setAttribute('data-weather', themes[themeIndex]);
+        });
+
+        // Category Filters
+        function initCategoryFilters() {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    currentCategory = btn.dataset.category;
+                    const title = btn.textContent.trim();
+                    document.getElementById('categoryTitle').textContent = title;
+                    
+                    const filtered = currentCategory === 'all' 
+                        ? clothingProducts 
+                        : clothingProducts.filter(p => p.category === currentCategory);
+                    
+                    renderProducts(filtered);
+                });
+            });
+        }
+
+        // View Toggle
+        function setView(view) {
+            const grid = document.getElementById('productsGrid');
+            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+            
+            if (view === 'list') {
+                grid.classList.add('list-view');
+                document.querySelector('.view-btn:last-child').classList.add('active');
+            } else {
+                grid.classList.remove('list-view');
+                document.querySelector('.view-btn:first-child').classList.add('active');
+            }
+        }
+
+        // Render Products
+        function renderProducts(products) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = products.map(product => createProductCard(product)).join('');
+        }
+
+        function createProductCard(product) {
+            const badge = product.badge 
+                ? `<div class="product-badge ${product.badge === 'new' ? 'new' : ''}">${product.badge.toUpperCase()}</div>` 
+                : '';
+            const originalPrice = product.originalPrice 
+                ? `<span class="original">$${product.originalPrice.toFixed(2)}</span>` 
+                : '';
+            const stars = '★'.repeat(Math.floor(product.rating)) + (product.rating % 1 ? '½' : '');
+            
+            const sizeBtns = product.sizes.map((size, i) => 
+                `<button class="size-btn ${i === 0 ? 'active' : ''}">${size}</button>`
+            ).join('');
+            
+            const colorBtns = product.colors.map((color, i) => 
+                `<div class="color-btn ${i === 0 ? 'active' : ''}" style="background: ${color};"></div>`
+            ).join('');
+            
+            return `
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas ${product.icon}"></i>
+                        ${badge}
+                        <div class="product-wishlist" onclick="toggleWishlist(this)">
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <div class="rating">
+                            <span style="color: var(--secondary);">${stars}</span>
+                            <span>(${product.reviews})</span>
+                        </div>
+                        <p class="description">${product.description}</p>
+                        <div class="size-options">${sizeBtns}</div>
+                        <div class="color-options">${colorBtns}</div>
+                        <div class="product-footer">
+                            <div class="product-price">
+                                $${product.price.toFixed(2)}${originalPrice}
+                            </div>
+                            <button class="add-btn" onclick="addToCart('${product.id}')">
+                                <i class="fas fa-cart-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleWishlist(el) {
+            el.classList.toggle('active');
+            const icon = el.querySelector('i');
+            icon.classList.toggle('far');
+            icon.classList.toggle('fas');
+            showNotification(el.classList.contains('active') ? 'Added to wishlist!' : 'Removed from wishlist');
+        }
+
+        // Cart Functions
+        async function addToCart(id) {
+            const product = clothingProducts.find(p => p.id === id);
+            if (!product) return;
+            
+            // Use Firebase cart if available
+            if (window.firebaseCart) {
+                await firebaseCart.add({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    icon: product.icon,
+                    type: 'clothing'
+                });
+            } else {
+                // Fallback to localStorage
+                const existing = cart.find(item => item.id === id);
+                if (existing) {
+                    existing.quantity += 1;
+                } else {
+                    cart.push({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        icon: product.icon,
+                        quantity: 1
+                    });
+                }
+                saveCart();
+                updateCartUI();
+                showNotification(`${product.name} added to cart!`);
+            }
+        }
+
+        function removeFromCart(id) {
+            if (window.firebaseCart) {
+                firebaseCart.remove(id);
+            } else {
+                cart = cart.filter(item => item.id !== id);
+                saveCart();
+                updateCartUI();
+            }
+        }
+
+        function saveCart() {
+            localStorage.setItem('gamestylehub-cart', JSON.stringify(cart));
+        }
+
+        function updateCartUI() {
+            const cartData = window.cart || cart;
+            const count = cartData.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            document.getElementById('cartCount').textContent = count;
+            
+            const cartItems = document.getElementById('cartItems');
+            if (cartData.length === 0) {
+                cartItems.innerHTML = '<div class="empty-cart"><i class="fas fa-shopping-cart"></i><p>Your cart is empty</p></div>';
+            } else {
+                cartItems.innerHTML = cartData.map(item => `
+                    <div class="cart-item">
+                        <div class="cart-item-image"><i class="fas ${item.icon || 'fa-tshirt'}"></i></div>
+                        <div class="cart-item-details">
+                            <h4>${item.name}</h4>
+                            <span>Qty: ${item.quantity || 1}</span>
+                            <span class="price">$${(item.price * (item.quantity || 1)).toFixed(2)}</span>
+                        </div>
+                        <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+            
+            const total = cartData.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+            document.getElementById('cartTotal').textContent = `$${total.toFixed(2)}`;
+        }
+
+        function openCart() {
+            document.getElementById('cartSidebar').classList.add('open');
+            document.getElementById('cartOverlay').classList.add('open');
+        }
+
+        function closeCart() {
+            document.getElementById('cartSidebar').classList.remove('open');
+            document.getElementById('cartOverlay').classList.remove('open');
+        }
+
+        function showNotification(message) {
+            const notif = document.createElement('div');
+            notif.style.cssText = `
+                position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+                background: var(--primary); color: white; padding: 15px 30px;
+                border-radius: 50px; font-weight: 500; z-index: 10000;
+                box-shadow: 0 5px 30px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;
+            `;
+            notif.textContent = message;
+            document.body.appendChild(notif);
+            setTimeout(() => {
+                notif.style.animation = 'slideDown 0.3s ease forwards';
+                setTimeout(() => notif.remove(), 300);
+            }, 2000);
+        }
+    </script>
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            if (!container) return;
+            const colors = ['#db61a2', '#a371f7', '#58a6ff', '#238636'];
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.width = (2 + Math.random() * 4) + 'px';
+                particle.style.height = particle.style.width;
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Scroll animations
+        function handleScrollAnimations() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+            elements.forEach(el => observer.observe(el));
+        }
+        document.querySelectorAll('.clothing-section, .clothing-card, .size-btn').forEach(el => {
+            el.classList.add('animate-on-scroll');
+        });
+        handleScrollAnimations();
+    </script>
+</body>
+</html>
